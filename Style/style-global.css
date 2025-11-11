@@ -1,0 +1,177 @@
+/*Configura os caracteres para UTF-8*/
+@charset "UTF-8";
+
+/*Importa fontes especiais*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+@font-face {
+    font-family: 'Horizon';
+    src: url('../fonts/Horizon.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*Reseta todos os parâmetros pré-definidos de todos os navegadores*/
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+/*Variáveis dos recursos da página*/
+:root {
+    /*Cores*/
+    --cor-fundo: #10276F;
+    --cor-destaque: #F2541B;
+    --cor-detalhe: #EFC978;
+    --preto: #0D0D0D;
+    --branco: #F2F2F2;
+
+    /*Fontes*/
+    --fonte-padrao: "Open Sans", Verdana, sans-serif;
+    --fonte-destaque: "Horizon", "Verdana", "sans-serif";
+}
+
+
+body {
+    background-color: var(--cor-fundo);
+    padding-top: 150px; /*Fornece o espaço para caber o menu*/
+    font-family: var(--fonte-padrao);
+}
+
+/*Personaliza os elementos gerais do cabeçalho*/
+header {
+    background-color: var(--cor-destaque);
+    color: var(--preto);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; 
+    display: flex;
+    align-items: center;
+    height: 80px;
+    padding: 0 1rem; /* Adiciona um respiro nas laterais */
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px; /*Adiciona uma sombra no menu*/
+}
+
+header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /*@Leo A classe container-fluid já não faz isso?*/
+}
+
+.logo img {
+    height: 80px; /* Controla o tamanho do logo */
+    width: auto;
+}
+
+/*Configurações gerais do menu*/
+.nav-bar{
+    display: flex;
+    justify-content: center;
+    padding: 20px; /*Aqui controla o espaçamento entre os links do menu*/
+    margin-top: 15px; /*Aqui faz com que os botões fiquem centralizados na vertical*/
+}
+
+/*Configurações dos itens do menu*/
+.nav-item{
+    display: flex;
+    align-items: center;
+    margin: 15px;
+    background-color: var(--cor-fundo); /*Aqui indica a cor do fundo do botão estático*/
+    border-radius: 10px;
+    padding: 10px; 
+    justify-content: center;
+    width: 160px;
+}
+
+/*Configurações dos itens do menu ao se passar o mouse*/
+.nav-item:hover{
+    transition: 1s; /*Aqui cria-se uma animação que diminui a opacidade das letras */
+    background-color: var(--preto);
+    color: var(--branco);
+    cursor: pointer; /*Aqui configura qual elemento vai ativar a animação*/
+}
+
+/*Configurações dos textos de cada item do menu*/
+.nav-link{
+    display: flex;
+    justify-content: center;
+    list-style: none; /*Tira os efeitos da lista, como bullet ou números*/
+    text-decoration: none; /*Tira os sublinhados dos links*/
+    font-size: 14px;
+    font-family: 'Horizon', sans-serif;
+    color: var(--branco);
+    transition: 1s; /*Aqui faz a animação das letras durarem mais */
+}
+
+/*O efeito da animação só não acontece com o botão do menu que está ativo no momento*/
+
+/*Configurações da seção de login*/
+.entrar {
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+/*Configurações do botão de entrar*/
+.btn-entrar {
+    background-color: var(--cor-detalhe);
+    color: var(--preto); /*@Leo Sugestão: mudar as cores do botão para deixar todos os textos do menu com a cor branca*/
+    font-weight: bold;
+    padding: 0.5rem 1.25rem;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease-in-out; /*Aqui cria-se uma animação*/
+}
+
+/*Configurações do botão de entrar ao passar o mouse por cima*/
+.btn-entrar:hover {
+    background-color: var(--branco); 
+    color: var(--cor-destaque); 
+    border-color: var(--cor-destaque);
+    transform: translateY(-2px); /*Aqui cria-se uma animação que faz o botão subir*/
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/*Configurações do ícone do usuário*/
+#user-icon {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+}
+
+/*Configurações do ícone do carrinho*/
+#carrinho-icon {
+    height: 40px;
+    width: 75px;
+    margin-left: -10px
+}
+
+/*Configurações do rodapé*/
+footer{
+    margin-top: 50px;
+    padding: 25px;
+    padding-bottom: -15px;
+    font-size: 12pt;
+    background-color: var(--cor-destaque);
+}
+
+footer h5{
+    font-weight: 600;
+}
+
+footer ul{
+    list-style: none;
+    margin-left: -30px;
+}
+
+footer a{
+    text-decoration: none;
+    color: var(--preto);
+}
+
+
