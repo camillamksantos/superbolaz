@@ -12,7 +12,6 @@ function carregarJson(){
 }
 
 function carregarCarrinho() {
-    console.log('Carregar Carrinho');
     carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     atualizarVisualizacaoCarrinho();
 }
@@ -28,14 +27,16 @@ function configurarBotoesAdicionar() {
 
 //Create
 function adicionarProduto(produtoId) {
+    console.log('Função iniciada')
     const itemExistente = carrinho.find(item => item.id === produtoId)
 
     const informacoesProduto = todosOsProdutos.find(p => p.id === produtoId);
 
     if (itemExistente) {
+        console.log('Item Existente')
         itemExistente.quantidade++;
     } else {
-        console.log('Adiciona Produto');
+        console.log('Adiciona Item')
         carrinho.push({
             id: produtoId,
             nome: informacoesProduto.nome,
