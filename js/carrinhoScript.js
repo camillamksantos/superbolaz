@@ -12,6 +12,7 @@ function carregarJson(){
 }
 
 function carregarCarrinho() {
+    console.log('Carregar Carrinho');
     carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     atualizarVisualizacaoCarrinho();
 }
@@ -34,6 +35,7 @@ function adicionarProduto(produtoId) {
     if (itemExistente) {
         itemExistente.quantidade++;
     } else {
+        console.log('Adiciona Produto');
         carrinho.push({
             id: produtoId,
             nome: informacoesProduto.nome,
