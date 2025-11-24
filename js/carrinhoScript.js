@@ -46,6 +46,7 @@ function tentarCarregarJson(caminhos, indice){
         });
 }
 
+//Carrega produtos armazenados no carrinho
 function carregarCarrinho() {
     try {
         carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
@@ -62,7 +63,7 @@ function configurarBotoesAdicionar() {
     console.log('Botões encontrados:', botoes.length);
     
     if (botoes.length === 0) {
-        console.warn('Nenhum botão .botao-comprar encontrado na página');
+        console.warn('Nenhum botão para comprar encontrado na página');
     }
     
     botoes.forEach(botao => {
@@ -114,7 +115,16 @@ function adicionarProduto(produtoId) {
         });
     }
     
-    alert(`"${informacoesProduto.nome}" adicionado ao carrinho!`);
+    function alertaCarrinho(){
+        Swal.fire({
+            title: 'Produto adicionado com sucesso', 
+            html: `<strong>${informacoesProduto.nome}</strong> adicionado ao carrinho!`,
+            icon: "success",
+            confirmButtonColor: "#F2541B"
+            });
+    }
+
+    alertaCarrinho();
     
     try {
         localStorage.setItem('carrinho', JSON.stringify(carrinho));
@@ -131,7 +141,7 @@ function atualizarVisualizacaoCarrinho() {
     const ItensCarrinho = document.getElementById('itens-carrinho');
     const CarrinhoVazio = document.getElementById('carrinho-vazio');
     
-    // Só atualiza se os elementos existirem (página do carrinho)
+    // Mostra páginas diferentes se houver itens ou não no carrinho
     if (ItensCarrinho && CarrinhoVazio) {
         if (carrinho.length === 0) {
             ItensCarrinho.style.display = 'none';
@@ -144,7 +154,6 @@ function atualizarVisualizacaoCarrinho() {
     
     const carrinhoDiv = document.getElementById('carrinho-itens');
     if (!carrinhoDiv) {
-        // Não está na página do carrinho, apenas atualiza o contador se existir
         atualizarContadorCarrinho();
         return;
     }
@@ -152,12 +161,76 @@ function atualizarVisualizacaoCarrinho() {
     carrinhoDiv.innerHTML = '<h2>Itens no Carrinho</h2>';
     let total = 0.00;
     
-    carrinho.forEach(item => {
+    carrinho.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
+
         const p = document.createElement('p');
         const valorTotalItem = item.preco * item.quantidade;
         total += valorTotalItem;
-        p.textContent = `${item.quantidade}x ${item.nome} - R$ ${valorTotalItem.toFixed(2)}`;
-        carrinhoDiv.appendChild(p);
+        p.innerHTML= `${item.quantidade}x <strong>${item.nome}</strong> - R$ ${valorTotalItem.toFixed(2)}`;
+        p.style.cssText = 'flex: 1; margin: 0;';
+
+        // Botões de quantidade
+        const botaoMenos = document.createElement('button');
+        botaoMenos.textContent = '-';
+        botaoMenos.style.cssText = 'width: 25px; height: 25px; border: none; cursor: pointer; background-color: #EFC978; box-shadow: 1px 1px 1px #000; border-radius: 5px;';
+        botaoMenos.onclick = () => {
+        if (item.quantidade > 1) {
+            item.quantidade--;
+        } else {
+            carrinho.splice(index, 1);
+        }
+        atualizarVisualizacaoCarrinho();
+    };
+    
+        const botaoMais = document.createElement('button');
+        botaoMais.textContent = '+';
+        botaoMais.style.cssText = 'width: 25px; height: 25px; border: none; cursor: pointer; background-color: #EFC978; box-shadow: 1px 1px 1px #000; border-radius: 5px;';
+        botaoMais.onclick = () => {
+            item.quantidade++;
+        atualizarVisualizacaoCarrinho();
+    };
+    
+    // Botão deletar
+    const botaoDeletar = document.createElement('button');
+    botaoDeletar.textContent = '🗑️';
+    botaoDeletar.style.cssText = 'cursor: pointer; border: none; background: none; font-size: 16px;';
+    //botaoDeletar.onclick = () => {
+      //  carrinho.splice(index, 1);
+        //item.quantidade = 0;
+        //atualizarVisualizacaoCarrinho();
+    //};
+
+    botaoDeletar.onclick = () => {
+        Swal.fire({
+            html: `Deseja remover <strong>${item.nome}</strong> do carrinho?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e74c3c',
+            cancelButtonColor: 'red',
+            confirmButtonText: 'Sim, remover!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                carrinho.splice(index, 1);
+                item.quantidade = 0;
+                atualizarVisualizacaoCarrinho();
+            Swal.fire({
+                title: 'Removido com sucesso!',
+                text: 'Produto removido do carrinho.',
+                icon: 'success',
+            });
+        }
+    });
+};
+    
+    itemDiv.appendChild(p);
+    itemDiv.appendChild(botaoMenos);
+    itemDiv.appendChild(botaoMais);
+    itemDiv.appendChild(botaoDeletar);
+    
+    carrinhoDiv.appendChild(itemDiv);
     });
     
     const totalElement = document.getElementById('total-carrinho');
@@ -178,12 +251,36 @@ function atualizarContadorCarrinho() {
 }
 
 function limparCarrinho() {
-    if (confirm('Tem certeza que deseja limpar todo o carrinho?')) {
+    Swal.fire({
+        title: "Tem certeza que deseja limpar todo o carrinho?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Sim",
+        denyButtonText: `Não`,
+        confirmButtonColor: "#F2541B"
+    }).then((result) => {
+    if (result.isConfirmed) {
+        Swal.fire({
+            title: "Seu carrinho está vazio agora!", 
+            icon: "success",
+            confirmButtonColor: "#F2541B"
+            });
         carrinho = [];
         localStorage.removeItem("carrinho");
         console.log('Carrinho limpo');
         atualizarVisualizacaoCarrinho();
+    } else if (result.isDenied) {
+        Swal.fire({
+            title: "Nenhuma mudança foi feita.", 
+            icon:"info",
+            confirmButtonColor: "#F2541B"
+            });
     }
+    });
+
+
+
+    
 }
 
 // Inicialização

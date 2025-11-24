@@ -169,12 +169,55 @@ function login(event) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+  const userIcone = document.getElementById('user-icon');
+  userIcone.addEventListener('click', verificarLogin1);
+});
+
 //Função para verificar se o usuário está logado
 function verificarLogin(){
     const usuarioLogado = sessionStorage.getItem("usuarioLogado");
     if(!usuarioLogado){
-        window.location.href = "./public/Login/Logon.html";
+        console.log('Não logado!')
         return null;
+    }
+    else{
+        console.log('Logado!');
+        document.querySelector('#botao-entrar').style.display = "none";
+    }
+    return JSON.parse(usuarioLogado);
+}
+
+function verificarLogin1(){
+    const usuarioLogado = sessionStorage.getItem("usuarioLogado");
+    if(!usuarioLogado){
+        function alertaNaoLogado(){
+            Swal.fire({
+            title: "Ops!",
+            text: "Você ainda não fez seu login.",
+            icon: "error",
+            confirmButtonColor: "#F2541B"
+            }).then((result) => {
+                // Redireciona quando o usuário clicar em OK
+                window.location.href = "login-pag.html";
+            });
+            ;
+        }
+        alertaNaoLogado();
+        console.log('Não logado!')
+        return null;
+    }
+    else{
+        function alertaLogado(){
+            Swal.fire({
+            title: "Bem-vindo!",
+            text: "Você já está logado",
+            icon: "success",
+            confirmButtonColor: "#F2541B"
+            });
+        }
+        alertaLogado();
+        console.log('Logado!');
     }
     return JSON.parse(usuarioLogado);
 }
@@ -184,3 +227,7 @@ function logout(){
     sessionStorage.removeItem("usuarioLogado");
     window.location.href = "./public/Login/Logon.html";
 }
+
+
+verificarLogin();
+document.addEventListener('DOMContentLoaded', verificarLogin);
